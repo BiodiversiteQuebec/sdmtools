@@ -11,7 +11,7 @@
 #' @param dens_buffer Logical. If `TRUE`, the density of background points will be equal to the density of occurrence points inside the buffer area. If `FALSE`, the density will be equal to the density of occurrences points within the convex hull around occurrences.
 #' @param nmax Maximum number of points to sample when `prop = FALSE`
 #' 
-#' @return An sf object with the background points.
+#' @return An sf object with the background points. Returns `NULL` if there is no area outside of the buffer used for the study area.
 #' 
 #' @details
 #' This function is used to add an artifical effort where we are relatively certain the target species is not found. By adding background points outside of the chosen buffer, it can help in reducing the lkelihood that the sdm model predicts high presence/abundance of the species outside of its actual range. The use of this function relies on the assumption that the species is not found outside of the buffer area. The function is meant to be used in conjunction with a target-group approach where background points are also generated using a taxonomic group with similar bias. Both types of background points can be added. The target-group background points ensure that the sampling bias is taken into account within the buffer area and the background points generated through the function here ensure that predictions do not extend much outside of the buffer area.  
