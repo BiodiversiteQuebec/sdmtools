@@ -39,7 +39,7 @@ backgroundBuffer <- function(
   if(convex) {
     buffer <- st_buffer(st_convex_hull(x), dist = dist)
   } else {
-    buffer <- st_buffer(x, dist = dist)
+    buffer <- st_buffer(st_cast(x, "POINT"), dist = dist) |> st_union()
   }
   outside <- st_difference(st_geometry(region), buffer)
   if(is.null(length(outside))){
