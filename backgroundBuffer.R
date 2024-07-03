@@ -67,6 +67,7 @@ backgroundBuffer <- function(
 }
 
 
+if(FALSE){
 
 library(sf)
 library(geodata)
@@ -128,7 +129,7 @@ plot(st_geometry(occs), add = TRUE)
 background <- backgroundBuffer(occs, region, prop = TRUE, dens_buffer = TRUE) 
 plot(background, col = "red", add = TRUE)
 
-
+}
 
 
 
