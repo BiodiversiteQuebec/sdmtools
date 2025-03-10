@@ -7,11 +7,11 @@
 habitatAssociation(raster, sdm, n = 10000, col = TRUE)
 }
 \arguments{
-\item{raster}{A categorical SpatRaster.}
+\item{raster}{A categorical SpatRaster with habitats.}
 
 \item{sdm}{A SpatRaster with numerical values.}
 
-\item{n}{Number of points to sample from the sdm.}
+\item{n}{Number of points to sample from the sdm. It can take a while to sample from sdm with high resolutions.}
 
 \item{col}{Logical. Use colours associated with the raster if any? Default \code{TRUE}. if \code{FALSE}, no colours used.}
 }
@@ -22,7 +22,7 @@ A list with a ggplot object and a \code{data.frame} with the habitat association
 This function quantifies habitat associations by contrasting what is available in an area to what is use by the species
 }
 \details{
-This function compares the frequency of the different categories of habitats in the area to the frequencies of the habitats in the distribution of the species. First, it randomly samples points proportionally to the values in the sdm and calculates and
+This function compares the frequency of the different categories of habitats in the area to the frequencies of the habitats in the distribution of the species. First, it randomly samples points proportionally to the values in the sdm and calculates and calculates the relative proportions of the different habitats where the points fall. These relative proportions are illustrated in the top row of the graph. Second, it calculates the ratio between these proportions and the proportions of the different habitats in the habitat raster. Values over 1 means the habitat is selected, values below 1 means the habitat is avoided. The graph is shown on a log scale so that ratios of x have the same visual impact has a ratio of 1/x. Habitat categories where no random points are found (with a ratio of 0) are given the smallest ratio that is not 0.
 }
 \examples{
 \dontrun{
