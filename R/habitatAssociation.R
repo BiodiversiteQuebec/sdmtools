@@ -105,9 +105,15 @@ habitatAssociation <- function(
     raster <- raster[[1]]
   }
 
-  sp <- spatSample(sdm, size = n, as.points = TRUE, method = "weights") |>
-    st_as_sf() |>
-    st_transform(st_crs(raster))
+  if(inherits(sdm, "SpatRaster")){
+    sp <- spatSample(sdm, size = n, as.points = TRUE, method = "weights") |>
+      st_as_sf() |>
+      st_transform(st_crs(raster))
+    title <- varnames(sdm)
+  } else {
+    sp <- st_transform(sdm, st_crs(raster))
+    title <- sdm$species[1]
+  }
 
   v <- names(levels(raster)[[1]])[2]
 
@@ -142,7 +148,9 @@ habitatAssociation <- function(
     e$col <- "forestgreen"
   }
 
-  e$ratio <- ifelse(e$ratio == 0, min(e$ratio[e$ratio > 0], na.rm = TRUE), e$ratio)
+  miny <- min(e$ratio[e$ratio > 0], na.rm = TRUE)
+  miny <- ifelse(miny >= 1, 1 / max(e$ratio[e$ratio > 0], na.rm = TRUE), miny)
+  e$ratio <- ifelse(e$ratio == 0, miny, e$ratio)
   e <- e[rev(order(e$ratio)),]
   e[[v]] <- factor(e[[v]], levels = e[[v]])
 
@@ -151,8 +159,8 @@ habitatAssociation <- function(
     #geom_point(aes(y = 1.5 * max(p)), fill = e$col, col = "white", shape = 21, size = e$width * 20, stroke = 0.0005) +
     geom_point(aes(y = 1.5 * max(ratio)), col = e$col, shape = 16, size = sqrt(e$perc) * 15) +
     #geom_col(fill = e$col, width = (e$width / max(e$width)) * 0.9) +
-    scale_y_continuous(trans = "log", breaks = c(0.01, 0.05, 0.1, 0.5, 1, 2, 5), limits = range(e$ratio) * c(1, 2)) +
-    labs(x = "Habitat", y = "Utilisation / Disponibilité\n(évitement < 1 < sélection)\n", title = varnames(sdm)) +
+    scale_y_continuous(trans = "log", breaks = c(0.01, 0.05, 0.1, 0.5, 1, 2, 5, 10, 20, 50), limits = range(e$ratio) * c(1, 2)) +
+    labs(x = "Habitat", y = "Utilisation / Disponibilité\n(évitement < 1 < sélection)\n", title = title) +
     theme_light() +
     theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5))
 
